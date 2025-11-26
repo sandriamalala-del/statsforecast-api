@@ -9,8 +9,8 @@ app = FastAPI(title="Prophet API for n8n")
 
 class ForecastRequest(BaseModel):
     data: List[dict]
-    h: int = 7
-    freq: str = "D"
+    h: int = 6
+    freq: str = "W"
 
 @app.get("/health")
 def health():
