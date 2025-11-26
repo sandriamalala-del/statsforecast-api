@@ -1,6 +1,5 @@
 fastapi
 uvicorn
-statsforecast
 pandas
 numpy
-scikit-learn
+prophet
