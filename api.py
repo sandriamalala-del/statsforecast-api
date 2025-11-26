@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
 import pandas as pd
-# CHANGEMENT : Import de la librairie Prophet
+# Import de la librairie Prophet
 from prophet import Prophet 
 
 app = FastAPI(title="Prophet API for n8n")
@@ -31,13 +31,14 @@ def forecast(request: ForecastRequest):
         m = Prophet()
         m.fit(df) # Entraînement
         
-        # Création des dates futures
-        future = m.make_future_dataframe(periods=request.h)
+        # --- CORRECTION ICI ---
+        # On ajoute freq=request.freq pour que le modèle respecte le "W" (hebdomadaire)
+        future = m.make_future_dataframe(periods=request.h, freq=request.freq)
+        # ----------------------
         
         # Prédiction
         forecast = m.predict(future)
-        # -----------------------
-
+        
         # On ne garde que les futures prédictions (les dernières lignes)
         result = forecast.tail(request.h)[['ds', 'yhat']].rename(columns={'yhat': 'Prophet'}).to_dict(orient='records')
         
