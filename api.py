@@ -30,7 +30,11 @@ def forecast(request: ForecastRequest):
         
         # Modèle
         model = StatsForecast(models=[AutoARIMA(season_length=7)], freq=request.freq)
-        fcst = model.forecast(df, h=request.h)
+        
+        # --- CORRECTION ---
+        # On spécifie explicitement que 'df' est l'argument df
+        fcst = model.forecast(df=df, h=request.h)
+        # ------------------
         
         # Format sortie
         result = fcst.reset_index().to_dict(orient='records')
